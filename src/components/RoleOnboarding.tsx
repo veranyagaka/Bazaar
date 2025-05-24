@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tractor, Store } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import FarmerDashboard from './FarmerDashboard';
+import BuyerDashboard from './BuyerDashboard';
 
 const RoleOnboarding = () => {
   const { user } = useUser();
@@ -30,22 +32,27 @@ const RoleOnboarding = () => {
     try {
       // Update user metadata with role and additional info
       await user?.update({
-        publicMetadata: {
+        unsafeMetadata: {
           role: role,
           onboarded: true,
-          ...(role === 'farmer' ? {
-            farmSize: formData.farmSize,
-            crops: formData.crops.split(',').map(crop => crop.trim()),
-          } : {
-            businessName: formData.businessName,
-            businessType: formData.businessType,
-          }),
-          location: formData.location
-        }
-      });
+          ...(role === 'farmer' 
+            ? {
+              farmSize: formData.farmSize,
+              crops: formData.crops.split(',').map(crop => crop.trim()),
+            } : {
+              businessName: formData.businessName,
+              businessType: formData.businessType,
+            }),
+            location: formData.location
+          }
+        });
 
-      // Redirect to dashboard
-      navigate('/');
+      // ...update user metadata...
+    if (role === 'farmer') {
+      navigate('/farmer');
+    } else {
+      navigate('/buyer');
+    }
     } catch (error) {
       console.error('Error updating user metadata:', error);
     } finally {
@@ -57,21 +64,21 @@ const RoleOnboarding = () => {
     <div className="min-h-screen bg-bazaar-bg flex items-center justify-center p-4">
       <Card className="bazaar-card max-w-2xl w-full">
         <CardHeader>
-          <CardTitle className="text-white text-2xl text-center">Complete Your Profile</CardTitle>
+          <CardTitle className="text-black text-2xl text-center">Complete Your Profile</CardTitle>
           <p className="text-gray-400 text-center">Tell us about yourself to get started</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Role Selection */}
             <div>
-              <Label className="text-white text-base mb-4 block">I am a:</Label>
+              <Label className="text-black text-base mb-4 block">I am a:</Label>
               <RadioGroup value={role} onValueChange={(value) => setRole(value as 'farmer' | 'buyer')}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className={`border rounded-lg p-4 cursor-pointer transition-colors ${role === 'farmer' ? 'border-primary bg-primary/10' : 'border-gray-600'}`}>
                     <Label htmlFor="farmer" className="cursor-pointer flex flex-col items-center space-y-2">
                       <RadioGroupItem value="farmer" id="farmer" />
                       <Tractor className="w-8 h-8 text-primary" />
-                      <span className="text-white font-medium">Farmer</span>
+                      <span className="text-black font-medium">Farmer</span>
                       <span className="text-gray-400 text-sm text-center">I grow and sell crops</span>
                     </Label>
                   </div>
@@ -79,7 +86,7 @@ const RoleOnboarding = () => {
                     <Label htmlFor="buyer" className="cursor-pointer flex flex-col items-center space-y-2">
                       <RadioGroupItem value="buyer" id="buyer" />
                       <Store className="w-8 h-8 text-primary" />
-                      <span className="text-white font-medium">Buyer</span>
+                      <span className="text-black font-medium">Buyer</span>
                       <span className="text-gray-400 text-sm text-center">I purchase crops for my business</span>
                     </Label>
                   </div>
@@ -89,7 +96,7 @@ const RoleOnboarding = () => {
 
             {/* Location */}
             <div>
-              <Label htmlFor="location" className="text-white">Location</Label>
+              <Label htmlFor="location" className="text-black">Location</Label>
               <Input
                 id="location"
                 placeholder="e.g., Pune, Maharashtra"
@@ -104,7 +111,7 @@ const RoleOnboarding = () => {
             {role === 'farmer' && (
               <>
                 <div>
-                  <Label htmlFor="farmSize" className="text-white">Farm Size (in acres)</Label>
+                  <Label htmlFor="farmSize" className="text-black">Farm Size (in acres)</Label>
                   <Input
                     id="farmSize"
                     type="number"
@@ -116,7 +123,7 @@ const RoleOnboarding = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="crops" className="text-white">Main Crops (comma separated)</Label>
+                  <Label htmlFor="crops" className="text-black">Main Crops (comma separated)</Label>
                   <Textarea
                     id="crops"
                     placeholder="e.g., Tomatoes, Rice, Onions"
@@ -133,7 +140,7 @@ const RoleOnboarding = () => {
             {role === 'buyer' && (
               <>
                 <div>
-                  <Label htmlFor="businessName" className="text-white">Business Name</Label>
+                  <Label htmlFor="businessName" className="text-black">Business Name</Label>
                   <Input
                     id="businessName"
                     placeholder="e.g., Fresh Mart"
@@ -144,7 +151,7 @@ const RoleOnboarding = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="businessType" className="text-white">Business Type</Label>
+                  <Label htmlFor="businessType" className="text-black">Business Type</Label>
                   <RadioGroup 
                     value={formData.businessType} 
                     onValueChange={(value) => setFormData({ ...formData, businessType: value as any })}
@@ -153,7 +160,7 @@ const RoleOnboarding = () => {
                       {['retailer', 'wholesaler', 'processor', 'restaurant'].map((type) => (
                         <div key={type} className="flex items-center space-x-2">
                           <RadioGroupItem value={type} id={type} />
-                          <Label htmlFor={type} className="text-white capitalize">{type}</Label>
+                          <Label htmlFor={type} className="text-black capitalize">{type}</Label>
                         </div>
                       ))}
                     </div>
