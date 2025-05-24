@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
-import AdminDashboard from "./pages/AdminDashboard";
 import Alerts from "./pages/Alerts";
 import Markets from "./pages/Markets";
 import Buyers from "./pages/Buyers";
