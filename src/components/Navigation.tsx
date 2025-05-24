@@ -11,9 +11,9 @@ const Navigation = () => {
 
   const navItems = [
     { name: 'Dashboard', href: '#dashboard', icon: TrendingUp },
-    { name: 'Markets', href: '#markets', icon: TrendingUp },
-    { name: 'Buyers', href: '#buyers', icon: Users },
-    { name: 'Alerts', href: '#alerts', icon: Bell },
+    { name: 'Markets', href: '/markets', icon: TrendingUp },
+    { name: 'Buyers', href: '/buyers', icon: Users },
+    { name: 'Alerts', href: '/alerts', icon: Bell },
   ];
   const isAdmin = user?.publicMetadata?.role === 'admin' || user?.emailAddresses[0]?.emailAddress?.includes('admin');
 
