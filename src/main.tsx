@@ -5,7 +5,7 @@ import App from './App.tsx'
 import './index.css'
 
 // Demo key for development - user needs to replace with their actual key
-const PUBLISHABLE_KEY = "pk_test_c2V0dGxpbmctYnJlYW0tODkuY2xlcmsuYWNjb3VudHMuZGV2JA"
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 // Check if we have a valid Clerk key
 const isValidClerkKey = PUBLISHABLE_KEY && !PUBLISHABLE_KEY.includes('demo-key-replace')
