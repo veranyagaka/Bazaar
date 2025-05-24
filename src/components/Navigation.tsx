@@ -1,8 +1,9 @@
 
 import { useState } from 'react';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
-import { Menu, X, TrendingUp, Users, Bell } from 'lucide-react';
+import { Menu, X, TrendingUp, Users, Bell, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ const Navigation = () => {
     { name: 'Buyers', href: '#buyers', icon: Users },
     { name: 'Alerts', href: '#alerts', icon: Bell },
   ];
+  const isAdmin = user?.publicMetadata?.role === 'admin' || user?.emailAddresses[0]?.emailAddress?.includes('admin');
 
   return (
     <nav className="bg-bazaar-card border-b border-gray-700/30 sticky top-0 z-50 backdrop-blur-sm">
@@ -41,6 +43,15 @@ const Navigation = () => {
                   <span>{item.name}</span>
                 </a>
               ))}
+                            {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1"
+                >
+                  <Shield className="w-4 h-4" />
+                  <span>Admin</span>
+                </Link>
+              )}
               <UserButton
                 appearance={{
                   elements: {
@@ -97,6 +108,16 @@ const Navigation = () => {
                   <span>{item.name}</span>
                 </a>
               ))}
+                {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="text-gray-300 hover:text-primary block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Shield className="w-4 h-4" />
+                  <span>Admin</span>
+                </Link>
+              )}
             </SignedIn>
             <SignedOut>
               <SignInButton mode="modal">
