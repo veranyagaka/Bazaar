@@ -15,6 +15,7 @@ const Navigation = () => {
     { name: 'Buyers', href: '#buyers', icon: Users },
     { name: 'Alerts', href: '#alerts', icon: Bell },
   ];
+  const isAdmin = user?.publicMetadata?.role === 'admin' || user?.emailAddresses[0]?.emailAddress?.includes('admin');
 
   // Check if user is admin (you can customize this logic based on your user roles)
   const isAdmin = user?.publicMetadata?.role === 'admin' || user?.emailAddresses[0]?.emailAddress?.includes('admin');
