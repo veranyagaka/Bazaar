@@ -43,12 +43,20 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-slide-up">
             <SignedOut>
-              <SignUpButton mode="modal">
+              <SignUpButton 
+                mode="modal"
+                afterSignUpUrl="/onboarding"
+                fallbackRedirectUrl="/onboarding"
+              >
                 <Button className="bazaar-button text-lg px-8 py-4">
                   Get Started as Farmer
                 </Button>
               </SignUpButton>
-              <SignUpButton mode="modal">
+              <SignUpButton 
+                mode="modal"
+                afterSignUpUrl="/onboarding"
+                fallbackRedirectUrl="/onboarding"
+              >
                 <Button variant="outline" className="bg-transparent border-primary text-primary hover:bg-primary hover:text-white text-lg px-8 py-4">
                   Join as Buyer
                 </Button>
