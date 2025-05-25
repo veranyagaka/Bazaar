@@ -6,8 +6,6 @@ A web-first platform connecting small-scale farmers with better market opportuni
 
 ## 📌 Table of Contents
 
-## 📌 Table of Contents
-
 - [🌟 Problem Statement](#-problem-statement)
 - [💡Solution](#solution)
 - [🧰 Tech Stack](#-tech-stack)
