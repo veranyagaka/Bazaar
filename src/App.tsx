@@ -28,6 +28,8 @@ const App = () => (
           <Route path="/chatroom" element={<Chatroom />} />
 
         </Routes>
+        <ChatWidget />
+
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
