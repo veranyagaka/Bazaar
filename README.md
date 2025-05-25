@@ -4,9 +4,9 @@
 
 A web-first platform connecting small-scale farmers with better market opportunities through real-time pricing data, buyer matching, and transparent agricultural commerce.
 
-🚀 Demo
-[📹 Canva Pitch Deck Link](https://www.canva.com/design/DAGoPGoNMZE/Wk6BFNWMOLKanS-OGux8mQ/edit?utm_content=DAGoPGoNMZE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-[🌐 Live Mobile App](https://bazaar-market-app.rork.app/)
+## 🚀 Demo
+- [📹 Canva Pitch Deck Link](https://www.canva.com/design/DAGoPGoNMZE/Wk6BFNWMOLKanS-OGux8mQ/edit?utm_content=DAGoPGoNMZE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- [🌐 Live Mobile App](https://bazaar-market-app.rork.app/)
 
 
 ## 📌 Table of Contents
@@ -60,11 +60,11 @@ Bazaar provides a comprehensive web platform that:
 
 <div align="center" style="gap: 16px;">
     <img src="/public/assets/five.png/" alt="Bazaar Insights Landscape" width="800"/>
-  <img src="/public/assets/six.png" alt="Bazaar Analytics Landscape" width="800"/>
   <img src="/public/assets/one.jpeg" alt="Bazaar App Welcome Screen" width="300"/>
   <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="300"/>
   <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="300"/>
   <img src="/public/assets/four.png" alt="Buyer Matches Screen" width="300"/>
+  <img src="/public/assets/six.png" alt="Bazaar Analytics Landscape" width="800"/>
 
 </div>
 
