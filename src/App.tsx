@@ -12,6 +12,7 @@ import Markets from "./pages/Markets";
 import Buyers from "./pages/Buyers";
 import Onboarding from "./pages/Onboarding";
 import Chatroom from "@/pages/Chatroom";
+import ChatWidget from "./components/ChatWidget";
 
 const queryClient = new QueryClient();
 
