@@ -1,375 +1,400 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Camera, Info, Leaf, AlertTriangle } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useState, useRef } from 'react';
+import { Camera, Upload, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useUser } from '@clerk/clerk-react';
 
 interface DetectionResult {
-  diseaseName: string;
-  confidence: number;
-  description: string;
-  treatment: string;
-  severity: 'low' | 'medium' | 'high';
+  disease_name: string;
+  confidence_score: number;
+  severity: 'mild' | 'moderate' | 'severe' | 'critical';
+  affected_area_percentage: number;
+  symptoms: string[];
+  causes: string[];
+  treatment_recommendations: string[];
+  preventive_measures: string[];
+  urgency: 'low' | 'medium' | 'high' | 'immediate';
+  estimated_yield_loss: number;
+  follow_up_required: boolean;
+  follow_up_days: number;
 }
 
-const DiseaseDetection: React.FC = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedCrop, setSelectedCrop] = useState<string>('');
-  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+const DiseaseDetection = () => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [detectionResult, setDetectionResult] = useState<DetectionResult | null>(null);
+  const [cropType, setCropType] = useState<string>('maize');
+  const [location, setLocation] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+  const { user } = useUser();
 
-  // Set page title
-  useEffect(() => {
-    document.title = 'Disease Detection - Bazaar';
-  }, []);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
       const reader = new FileReader();
-      
-      reader.onload = (event) => {
-        if (event.target) {
-          setSelectedImage(event.target.result as string);
-          setDetectionResult(null);
-        }
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
       };
-      
       reader.readAsDataURL(file);
+      setDetectionResult(null);
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const uploadImageToSupabase = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
     
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      const reader = new FileReader();
-      
-      reader.onload = (event) => {
-        if (event.target) {
-          setSelectedImage(event.target.result as string);
-          setDetectionResult(null);
-        }
-      };
-      
-      reader.readAsDataURL(file);
+    const { data, error } = await supabase.storage
+      .from('disease-images')
+      .upload(fileName, file);
+
+    if (error) {
+      throw error;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('disease-images')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
+  };
+
+  const callAIDetectionService = async (imageUrl: string): Promise<DetectionResult> => {
+    const { data, error } = await supabase.functions.invoke('ai-disease-detection', {
+      body: {
+        imageUrl,
+        cropType,
+        location: location || 'Kenya'
+      }
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  };
+
+  const saveDetectionResult = async (imageUrl: string, result: DetectionResult) => {
+    const { error } = await supabase
+      .from('disease_detections')
+      .insert({
+        farmer_id: user?.id,
+        image_url: imageUrl,
+        disease_name: result.disease_name,
+        confidence_score: result.confidence_score,
+        severity: result.severity,
+        affected_area_percentage: result.affected_area_percentage,
+        symptoms: result.symptoms,
+        causes: result.causes,
+        treatment_recommendations: result.treatment_recommendations,
+        preventive_measures: result.preventive_measures,
+        urgency: result.urgency,
+        estimated_yield_loss: result.estimated_yield_loss,
+        location: location || 'Kenya',
+        follow_up_required: result.follow_up_required,
+        follow_up_date: result.follow_up_required ? 
+          new Date(Date.now() + result.follow_up_days * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null
+      });
+
+    if (error) {
+      throw error;
     }
   };
 
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const analyzeImage = async () => {
-    if (!selectedImage) {
-      toast.error('Please select an image first');
+  const handleAnalyze = async () => {
+    if (!selectedImage || !user) {
+      toast({
+        title: "Error",
+        description: "Please select an image and ensure you're logged in",
+        variant: "destructive"
+      });
       return;
     }
 
-    if (!selectedCrop) {
-      toast.error('Please select a crop type');
+    if (!location.trim()) {
+      toast({
+        title: "Location Required",
+        description: "Please enter your location for better analysis",
+        variant: "destructive"
+      });
       return;
     }
 
     setIsAnalyzing(true);
     
     try {
-      // Simulate API call for disease detection
-      // In production, this would be a call to an edge function that interfaces with ML model
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Upload image to Supabase Storage
+      const imageUrl = await uploadImageToSupabase(selectedImage);
       
-      // Mock result
-      const mockResult: DetectionResult = {
-        diseaseName: 'Late Blight',
-        confidence: 87.5,
-        description: 'Late blight is a potentially devastating disease of tomato and potato, caused by the fungus Phytophthora infestans. The disease spreads quickly in wet weather and can cause significant yield loss.',
-        treatment: 'Apply copper-based fungicides as a preventative measure. Remove and destroy all infected plant material. Improve air circulation around plants.',
-        severity: 'medium',
-      };
+      // Call real AI detection service
+      const result = await callAIDetectionService(imageUrl);
       
-      setDetectionResult(mockResult);
+      // Save detection result to database
+      await saveDetectionResult(imageUrl, result);
       
+      setDetectionResult(result);
+      
+      // Trigger data warehouse sync
+      try {
+        await supabase.functions.invoke('data-warehouse-sync');
+      } catch (syncError) {
+        console.error('Data warehouse sync failed:', syncError);
+        // Don't fail the main operation if sync fails
+      }
+      
+      toast({
+        title: "Analysis Complete",
+        description: `Disease analysis completed with ${(result.confidence_score * 100).toFixed(1)}% confidence`
+      });
     } catch (error) {
-      console.error('Error analyzing image:', error);
-      toast.error('Failed to analyze image. Please try again.');
+      console.error('Analysis failed:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "Failed to analyze the image. Please try again.",
+        variant: "destructive"
+      });
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  const resetDetection = () => {
-    setSelectedImage(null);
-    setDetectionResult(null);
-    setSelectedCrop('');
-  };
-
-  // List of common crops for the dropdown
-  const cropOptions = [
-    'Tomatoes',
-    'Potatoes',
-    'Maize',
-    'Rice',
-    'Wheat',
-    'Soybeans',
-    'Coffee',
-    'Cassava',
-    'Cabbage',
-    'Carrots',
-  ];
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'low':
-        return 'text-success-500 bg-success-500/10';
-      case 'medium':
-        return 'text-warning-500 bg-warning-500/10';
-      case 'high':
-        return 'text-error-500 bg-error-500/10';
-      default:
-        return 'text-gray-400 bg-gray-400/10';
+      case 'mild': return 'text-green-500';
+      case 'moderate': return 'text-yellow-500';
+      case 'severe': return 'text-orange-500';
+      case 'critical': return 'text-red-500';
+      default: return 'text-gray-500';
+    }
+  };
+
+  const getUrgencyIcon = (urgency: string) => {
+    switch (urgency) {
+      case 'low': return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'medium': return <Clock className="w-5 h-5 text-yellow-500" />;
+      case 'high': return <AlertTriangle className="w-5 h-5 text-orange-500" />;
+      case 'immediate': return <AlertTriangle className="w-5 h-5 text-red-500" />;
+      default: return <Clock className="w-5 h-5 text-gray-500" />;
     }
   };
 
   return (
-    <div className="pb-16 md:pb-0">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white mb-2">
-          Crop Disease Detection
-        </h1>
-        <p className="text-gray-400">
-          Upload a photo of your crop to identify potential diseases and get treatment recommendations
-        </p>
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left side - Image upload & analysis */}
-        <div className="space-y-6">
-          {/* Upload section */}
-          <div className="bg-background-light border border-gray-800 rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Upload Plant Image</h2>
+    <div className="min-h-screen bg-background py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            AI Crop Disease Detection
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Upload photos of your crops to get instant disease diagnosis and treatment recommendations powered by advanced AI
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Image Upload Section */}
+          <div className="gradient-card p-6 rounded-lg">
+            <h2 className="text-xl font-semibold text-foreground mb-4">Upload Crop Image</h2>
             
-            {!selectedImage ? (
-              <div 
-                className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center cursor-pointer hover:border-primary-500 transition-colors"
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                onClick={triggerFileInput}
-              >
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  className="hidden" 
-                  accept="image/*" 
-                  onChange={handleFileChange}
-                />
-                <div className="flex flex-col items-center">
-                  <Upload className="h-12 w-12 text-gray-400 mb-4" />
-                  <p className="text-white font-medium mb-2">Drag and drop or click to upload</p>
-                  <p className="text-sm text-gray-400">JPG, PNG, or GIF files</p>
+            <div className="space-y-4">
+              {/* Crop Type and Location Inputs */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Crop Type
+                  </label>
+                  <select
+                    value={cropType}
+                    onChange={(e) => setCropType(e.target.value)}
+                    className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
+                  >
+                    <option value="maize">Maize</option>
+                    <option value="beans">Beans</option>
+                    <option value="potatoes">Potatoes</option>
+                    <option value="tomatoes">Tomatoes</option>
+                    <option value="kale">Kale (Sukuma Wiki)</option>
+                    <option value="cabbage">Cabbage</option>
+                    <option value="onions">Onions</option>
+                    <option value="coffee">Coffee</option>
+                  </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Location/County
+                  </label>
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g., Nairobi, Kiambu"
+                    className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
+                  />
+                </div>
+              </div>
+
+              {!imagePreview ? (
+                <div 
+                  className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground mb-2">Click to upload or drag and drop</p>
+                  <p className="text-sm text-muted-foreground">PNG, JPG or JPEG (max 10MB)</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="relative">
+                    <img 
+                      src={imagePreview} 
+                      alt="Selected crop" 
+                      className="w-full h-64 object-cover rounded-lg"
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="absolute top-2 right-2"
+                      onClick={() => {
+                        setImagePreview(null);
+                        setSelectedImage(null);
+                        setDetectionResult(null);
+                      }}
+                    >
+                      Change Image
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelect}
+                className="hidden"
+              />
+
+              <Button
+                onClick={handleAnalyze}
+                disabled={!selectedImage || isAnalyzing || !location.trim()}
+                className="w-full"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                    Analyzing with AI...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Analyze for Diseases
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+
+          {/* Results Section */}
+          <div className="gradient-card p-6 rounded-lg">
+            <h2 className="text-xl font-semibold text-foreground mb-4">AI Analysis Results</h2>
+            
+            {!detectionResult ? (
+              <div className="text-center py-12">
+                <AlertTriangle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">
+                  Upload and analyze an image to see AI-powered disease detection results
+                </p>
               </div>
             ) : (
-              <div className="rounded-lg overflow-hidden relative">
-                <img 
-                  src={selectedImage} 
-                  alt="Selected plant" 
-                  className="w-full h-auto object-cover"
-                />
-                <button
-                  onClick={resetDetection}
-                  className="absolute top-2 right-2 bg-background p-1 rounded-md text-white hover:bg-gray-700"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            )}
-            
-            {/* Camera option */}
-            <div className="flex mt-4 justify-center">
-              <button 
-                className="flex items-center text-primary-500 hover:text-primary-400"
-                onClick={() => toast.error('Camera access is currently unavailable. Please upload an image instead.')}
-              >
-                <Camera className="h-5 w-5 mr-1" />
-                <span className="text-sm">Or take a photo</span>
-              </button>
-            </div>
-          </div>
-          
-          {/* Crop selection & analysis button */}
-          <div className="bg-background-light border border-gray-800 rounded-lg p-6">
-            <div className="mb-4">
-              <label htmlFor="cropType" className="block text-sm font-medium text-gray-300 mb-2">
-                Select Crop Type
-              </label>
-              <select
-                id="cropType"
-                className="w-full px-4 py-2 bg-background text-white rounded-md border border-gray-700 focus:outline-none focus:border-primary-500"
-                value={selectedCrop}
-                onChange={(e) => setSelectedCrop(e.target.value)}
-              >
-                <option value="">Select a crop</option>
-                {cropOptions.map((crop) => (
-                  <option key={crop} value={crop}>{crop}</option>
-                ))}
-              </select>
-            </div>
-            
-            <button
-              onClick={analyzeImage}
-              disabled={!selectedImage || !selectedCrop || isAnalyzing}
-              className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-                !selectedImage || !selectedCrop || isAnalyzing
-                  ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-primary-500 text-white hover:bg-primary-600'
-              }`}
-            >
-              {isAnalyzing ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Analyzing Image...
-                </>
-              ) : (
-                'Analyze Image'
-              )}
-            </button>
-          </div>
-        </div>
-        
-        {/* Right side - Results or tips */}
-        <div className="bg-background-light border border-gray-800 rounded-lg p-6">
-          {detectionResult ? (
-            // Display detection results
-            <div>
-              <h2 className="text-lg font-semibold text-white mb-4">Detection Results</h2>
-              
-              <div className="bg-background p-4 rounded-lg border border-gray-700 mb-4">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="text-white font-medium">{detectionResult.diseaseName}</h3>
-                    <div className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium mt-1 ${getSeverityColor(detectionResult.severity)}`}>
-                      {detectionResult.severity.charAt(0).toUpperCase() + detectionResult.severity.slice(1)} Severity
+              <div className="space-y-6">
+                {/* Disease Info */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-foreground">
+                      {detectionResult.disease_name}
+                    </h3>
+                    <div className="flex items-center space-x-2">
+                      {getUrgencyIcon(detectionResult.urgency)}
+                      <span className="text-sm capitalize text-muted-foreground">
+                        {detectionResult.urgency} urgency
+                      </span>
                     </div>
-                  </div>
-                  <div className="bg-primary-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-semibold text-sm">
-                    {Math.round(detectionResult.confidence)}%
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-300 flex items-center">
-                      <Info className="h-4 w-4 mr-1 text-primary-500" />
-                      Description
-                    </h4>
-                    <p className="mt-1 text-sm text-gray-400">
-                      {detectionResult.description}
-                    </p>
                   </div>
                   
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-300 flex items-center">
-                      <Leaf className="h-4 w-4 mr-1 text-success-500" />
-                      Treatment
-                    </h4>
-                    <p className="mt-1 text-sm text-gray-400">
-                      {detectionResult.treatment}
+                  <div className="flex items-center space-x-4">
+                    <span className="text-sm text-muted-foreground">
+                      Confidence: {(detectionResult.confidence_score * 100).toFixed(1)}%
+                    </span>
+                    <span className={`text-sm font-medium capitalize ${getSeverityColor(detectionResult.severity)}`}>
+                      {detectionResult.severity} severity
+                    </span>
+                  </div>
+
+                  {detectionResult.affected_area_percentage > 0 && (
+                    <div className="text-sm text-muted-foreground">
+                      Affected Area: {detectionResult.affected_area_percentage.toFixed(1)}%
+                    </div>
+                  )}
+
+                  {detectionResult.estimated_yield_loss > 0 && (
+                    <div className="text-sm text-orange-600">
+                      Estimated Yield Loss: {detectionResult.estimated_yield_loss.toFixed(1)}%
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-foreground mb-2">Symptoms</h4>
+                  <ul className="space-y-1">
+                    {detectionResult.symptoms.map((symptom, index) => (
+                      <li key={index} className="text-sm text-muted-foreground flex items-center">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2" />
+                        {symptom}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Treatment */}
+                <div>
+                  <h4 className="font-medium text-foreground mb-2">Treatment Recommendations</h4>
+                  <ul className="space-y-1">
+                    {detectionResult.treatment_recommendations.map((treatment, index) => (
+                      <li key={index} className="text-sm text-muted-foreground flex items-center">
+                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                        {treatment}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Prevention */}
+                <div>
+                  <h4 className="font-medium text-foreground mb-2">Prevention Measures</h4>
+                  <ul className="space-y-1">
+                    {detectionResult.preventive_measures.map((measure, index) => (
+                      <li key={index} className="text-sm text-muted-foreground flex items-center">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2" />
+                        {measure}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {detectionResult.follow_up_required && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <p className="text-sm text-yellow-800">
+                      <AlertTriangle className="w-4 h-4 inline mr-2" />
+                      Follow-up recommended in {detectionResult.follow_up_days} days
                     </p>
                   </div>
-                </div>
+                )}
               </div>
-              
-              <div className="bg-warning-500/10 p-4 rounded-lg">
-                <div className="flex">
-                  <AlertTriangle className="h-5 w-5 text-warning-500 mr-2 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-sm font-medium text-warning-500">Important Note</h4>
-                    <p className="mt-1 text-xs text-gray-400">
-                      This analysis is based on image recognition and should be used as a guide only. For severe cases, consult with an agricultural expert for confirmation.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6 text-center">
-                <button
-                  onClick={resetDetection}
-                  className="inline-flex items-center text-primary-500 hover:text-primary-400"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Start New Detection
-                </button>
-              </div>
-            </div>
-          ) : (
-            // Display tips when no detection is in progress
-            <div>
-              <h2 className="text-lg font-semibold text-white mb-4">Crop Disease Detection Tips</h2>
-              
-              <div className="space-y-4">
-                <div className="bg-background p-4 rounded-lg border border-gray-700">
-                  <h3 className="text-white font-medium mb-2 flex items-center">
-                    <div className="w-6 h-6 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
-                      <span className="text-primary-500 text-xs">1</span>
-                    </div>
-                    Take clear photos
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Ensure good lighting and focus on the affected area. Include both healthy and diseased parts for comparison.
-                  </p>
-                </div>
-                
-                <div className="bg-background p-4 rounded-lg border border-gray-700">
-                  <h3 className="text-white font-medium mb-2 flex items-center">
-                    <div className="w-6 h-6 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
-                      <span className="text-primary-500 text-xs">2</span>
-                    </div>
-                    Multiple angles
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    For best results, upload multiple photos from different angles to improve detection accuracy.
-                  </p>
-                </div>
-                
-                <div className="bg-background p-4 rounded-lg border border-gray-700">
-                  <h3 className="text-white font-medium mb-2 flex items-center">
-                    <div className="w-6 h-6 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
-                      <span className="text-primary-500 text-xs">3</span>
-                    </div>
-                    Select correct crop type
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    The detection system uses crop-specific models. Selecting the correct crop type improves accuracy.
-                  </p>
-                </div>
-                
-                <div className="bg-background p-4 rounded-lg border border-gray-700">
-                  <h3 className="text-white font-medium mb-2 flex items-center">
-                    <div className="w-6 h-6 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
-                      <span className="text-primary-500 text-xs">4</span>
-                    </div>
-                    Disease progression
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Early detection is crucial. Regular scanning helps identify diseases before they spread.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

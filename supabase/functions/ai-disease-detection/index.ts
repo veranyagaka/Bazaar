@@ -2,8 +2,6 @@ import express from 'express';
 const app = express();
 app.use(express.json());
 
-import { createClient } from '@supabase/supabase-js';
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
