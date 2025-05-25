@@ -60,10 +60,10 @@ Bazaar provides a comprehensive web platform that:
 
 <div align="center" style="gap: 16px;">
     <img src="/public/assets/five.png/" alt="Bazaar Insights Landscape" width="800"/>
-  <img src="/public/assets/one.jpeg" alt="Bazaar App Welcome Screen" width="300"/>
-  <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="300"/>
-  <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="300"/>
-  <img src="/public/assets/four.png" alt="Buyer Matches Screen" width="300"/>
+  <img src="/public/assets/one.jpeg" alt="Bazaar App Welcome Screen" width="200"/>
+  <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="200"/>
+  <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="200"/>
+  <img src="/public/assets/four.png" alt="Buyer Matches Screen" width="200"/>
   <img src="/public/assets/six.png" alt="Bazaar Analytics Landscape" width="800"/>
 
 </div>
