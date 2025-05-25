@@ -53,13 +53,12 @@ Bazaar provides a comprehensive web platform that:
 
 ## 🖼 Screenshots
 
-![WhatsApp Image 2025-05-24 at 2.57.35 PM.jpeg](WhatsApp_Image_2025-05-24_at_2.57.35_PM.jpeg)
-
-![image.png](3f1ca8f3-aa71-4174-8ea5-89362a2d530b.png)
-
-![WhatsApp Image 2025-05-23 at 09.23.44 (2).jpeg](WhatsApp_Image_2025-05-23_at_09.23.44_(2).jpeg)
-
-![WhatsApp Image 2025-05-23 at 09.23.44.jpeg](WhatsApp_Image_2025-05-23_at_09.23.44.jpeg)
+<div align="center">
+  <img src="/public/assets/one.jpeg" alt="Bazaar App Welcome Screen" width="300"/>
+  <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="300"/>
+  <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="300"/>
+  <img src="/public/assets/four.jpeg" alt="Buyer Matches Screen" width="300"/>
+</div>
 
 ## 🚀 Getting Started
 
