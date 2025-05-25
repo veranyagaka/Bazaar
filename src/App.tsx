@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
+import Chatroom from "@/pages/Chatroom";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,9 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
+
+          <Route path="/chatroom" element={<Chatroom />} />
+
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
