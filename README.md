@@ -1,5 +1,3 @@
-# BAZAAR DOCUMENTATION
-
 # Bazaar - Market Match Platform for Farmers 🌾
 
 A web-first platform connecting small-scale farmers with better market opportunities through real-time pricing data, buyer matching, and transparent agricultural commerce.
