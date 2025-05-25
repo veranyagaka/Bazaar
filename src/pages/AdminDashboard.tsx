@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Upload, FileSpreadsheet, Download, Trash2, Edit3, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,7 +41,6 @@ const AdminDashboard = () => {
       return;
     }
 
-    // Simulate file processing
     setTimeout(() => {
       const newData: PriceData[] = [
         { id: Date.now().toString(), produce: 'Cabbage', category: 'vegetables', price: 25, unit: 'kg', market: 'Import from Excel', lastUpdated: new Date().toISOString().split('T')[0] },
@@ -56,7 +54,6 @@ const AdminDashboard = () => {
       });
     }, 1000);
 
-    // Reset file input
     event.target.value = '';
   };
 
@@ -98,7 +95,6 @@ const AdminDashboard = () => {
   };
 
   const exportData = () => {
-    // Simulate export functionality
     toast({
       title: "Export started",
       description: "Price data is being exported to Excel file",
@@ -106,19 +102,18 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bazaar-bg">
+    <div className="min-h-screen bg-white text-gray-900">
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">Manage market prices and data imports</p>
+          <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+          <p className="text-gray-600">Manage market prices and data imports</p>
         </div>
 
-        {/* Upload Section */}
-        <Card className="bazaar-card mb-8">
+        <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <Upload className="w-5 h-5" />
               Price Data Management
             </CardTitle>
@@ -127,9 +122,9 @@ const AdminDashboard = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <label htmlFor="excel-upload" className="cursor-pointer">
-                  <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-primary transition-colors">
-                    <FileSpreadsheet className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-300 mb-1">Upload Excel file</p>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
+                    <FileSpreadsheet className="w-8 h-8 text-gray-500 mx-auto mb-2" />
+                    <p className="mb-1">Upload Excel file</p>
                     <p className="text-sm text-gray-500">Supports .xlsx and .xls files</p>
                   </div>
                   <input
@@ -155,85 +150,84 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Price Data Table */}
-        <Card className="bazaar-card">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-white">Current Market Prices</CardTitle>
+            <CardTitle>Current Market Prices</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-gray-300">Produce</TableHead>
-                    <TableHead className="text-gray-300">Category</TableHead>
-                    <TableHead className="text-gray-300">Price</TableHead>
-                    <TableHead className="text-gray-300">Unit</TableHead>
-                    <TableHead className="text-gray-300">Market</TableHead>
-                    <TableHead className="text-gray-300">Last Updated</TableHead>
-                    <TableHead className="text-gray-300">Actions</TableHead>
+                    <TableHead>Produce</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Unit</TableHead>
+                    <TableHead>Market</TableHead>
+                    <TableHead>Last Updated</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {priceData.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="text-white">
+                      <TableCell>
                         {editingId === item.id ? (
                           <Input
                             value={editingData.produce || ''}
                             onChange={(e) => setEditingData(prev => ({ ...prev, produce: e.target.value }))}
-                            className="bazaar-input h-8"
+                            className="h-8"
                           />
                         ) : (
                           item.produce
                         )}
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell>
                         {editingId === item.id ? (
                           <Input
                             value={editingData.category || ''}
                             onChange={(e) => setEditingData(prev => ({ ...prev, category: e.target.value }))}
-                            className="bazaar-input h-8"
+                            className="h-8"
                           />
                         ) : (
                           item.category
                         )}
                       </TableCell>
-                      <TableCell className="text-white">
+                      <TableCell>
                         {editingId === item.id ? (
                           <Input
                             type="number"
                             value={editingData.price || ''}
                             onChange={(e) => setEditingData(prev => ({ ...prev, price: Number(e.target.value) }))}
-                            className="bazaar-input h-8"
+                            className="h-8"
                           />
                         ) : (
                           `$${item.price}`
                         )}
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell>
                         {editingId === item.id ? (
                           <Input
                             value={editingData.unit || ''}
                             onChange={(e) => setEditingData(prev => ({ ...prev, unit: e.target.value }))}
-                            className="bazaar-input h-8"
+                            className="h-8"
                           />
                         ) : (
                           item.unit
                         )}
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell>
                         {editingId === item.id ? (
                           <Input
                             value={editingData.market || ''}
                             onChange={(e) => setEditingData(prev => ({ ...prev, market: e.target.value }))}
-                            className="bazaar-input h-8"
+                            className="h-8"
                           />
                         ) : (
                           item.market
                         )}
                       </TableCell>
-                      <TableCell className="text-gray-300">{item.lastUpdated}</TableCell>
+                      <TableCell>{item.lastUpdated}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           {editingId === item.id ? (
