@@ -1,30 +1,26 @@
-// Install dependencies: npm install express cors dotenv node-fetch
 import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import fetch from 'node-fetch';
-
-dotenv.config();
-
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+import { createClient } from '@supabase/supabase-js';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-app.options('*', (req, res) => {
-  res.set(corsHeaders).send();
+app.options('/', (req, res) => {
+  res.set(corsHeaders);
+  res.status(204).send();
 });
 
 app.post('/', async (req, res) => {
   try {
     const { imageUrl, cropType, location } = req.body;
+
     const openAIApiKey = process.env.OPENAI_API_KEY;
     if (!openAIApiKey) {
-      return res.status(500).json({ error: 'OpenAI API key not configured' });
+      throw new Error('OpenAI API key not configured');
     }
 
     // Analyze image with OpenAI Vision
@@ -39,7 +35,8 @@ app.post('/', async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: `You are an expert agricultural pathologist specializing in crop diseases in Kenya. Analyze the provided crop image and provide a detailed disease assessment. Return your response as a JSON object with the following structure:\n{\n  "disease_name": "specific disease name",\n  "confidence_score": 0.85,\n  "severity": "mild|moderate|severe|critical",\n  "affected_area_percentage": 25.5,\n  "symptoms": ["list of observed symptoms"],\n  "causes": ["list of potential causes"],\n  "treatment_recommendations": ["specific treatment steps"],\n  "preventive_measures": ["prevention strategies"],\n  "urgency": "low|medium|high|immediate",\n  "estimated_yield_loss": 15.0,\n  "follow_up_required": true,\n  "follow_up_days": 7\n}\nFocus on diseases common in Kenya for crops like maize, beans, potatoes, tomatoes, kale, and other local crops. If no disease is detected, set disease_name to "healthy" and adjust other fields accordingly.`
+            content: `You are an expert agricultural pathologist specializing in crop diseases in Kenya. Analyze the provided crop image and provide a detailed disease assessment. Return your response as a JSON object with the following structure:
+            {\n  "disease_name": "specific disease name",\n  "confidence_score": 0.85,\n  "severity": "mild|moderate|severe|critical",\n  "affected_area_percentage": 25.5,\n  "symptoms": ["list of observed symptoms"],\n  "causes": ["list of potential causes"],\n  "treatment_recommendations": ["specific treatment steps"],\n  "preventive_measures": ["prevention strategies"],\n  "urgency": "low|medium|high|immediate",\n  "estimated_yield_loss": 15.0,\n  "follow_up_required": true,\n  "follow_up_days": 7\n}\n\nFocus on diseases common in Kenya for crops like maize, beans, potatoes, tomatoes, kale, and other local crops. If no disease is detected, set disease_name to "healthy" and adjust other fields accordingly.`
           },
           {
             role: 'user',
@@ -63,7 +60,7 @@ app.post('/', async (req, res) => {
     });
 
     if (!response.ok) {
-      return res.status(500).json({ error: `OpenAI API error: ${response.statusText}` });
+      throw new Error(`OpenAI API error: ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -92,17 +89,16 @@ app.post('/', async (req, res) => {
       };
     }
 
-    res.set(corsHeaders).json(detectionResult);
-  } catch (error: any) {
+    res.set({ ...corsHeaders, 'Content-Type': 'application/json' });
+    res.json(detectionResult);
+  } catch (error) {
     console.error('Error in AI disease detection:', error);
-    res.status(500).set(corsHeaders).json({
+    res.set({ ...corsHeaders, 'Content-Type': 'application/json' });
+    res.status(500).json({
       error: 'Disease detection failed',
       details: error.message
     });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`AI disease detection server running on port ${PORT}`);
-});
+app.listen(3000, () => console.log('Server running on port 3000'));
