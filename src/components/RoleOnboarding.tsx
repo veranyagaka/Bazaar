@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,7 +29,6 @@ const RoleOnboarding = () => {
     setLoading(true);
 
     try {
-      // Update user metadata with role and additional info
       await user?.update({
         unsafeMetadata: {
           role: role,
@@ -74,16 +72,16 @@ const RoleOnboarding = () => {
               <Label className="text-black text-base mb-4 block">I am a:</Label>
               <RadioGroup value={role} onValueChange={(value) => setRole(value as 'farmer' | 'buyer')}>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className={`border rounded-lg p-4 cursor-pointer transition-colors ${role === 'farmer' ? 'border-primary bg-primary/10' : 'border-gray-600'}`}>
-                    <Label htmlFor="farmer" className="cursor-pointer flex flex-col items-center space-y-2">
+                  <div className={`border rounded-lg p-4 cursor-pointer transition-colors ${role === 'farmer' ? 'border-primary bg-primary/10' : 'border-gray-300'}`}>
+                    <Label htmlFor="farmer" className="cursor-pointer flex flex-col items-center space-y-2 text-gray-800">
                       <RadioGroupItem value="farmer" id="farmer" />
                       <Tractor className="w-8 h-8 text-primary" />
                       <span className="text-black font-medium">Farmer</span>
                       <span className="text-gray-400 text-sm text-center">I grow and sell crops</span>
                     </Label>
                   </div>
-                  <div className={`border rounded-lg p-4 cursor-pointer transition-colors ${role === 'buyer' ? 'border-primary bg-primary/10' : 'border-gray-600'}`}>
-                    <Label htmlFor="buyer" className="cursor-pointer flex flex-col items-center space-y-2">
+                  <div className={`border rounded-lg p-4 cursor-pointer transition-colors ${role === 'buyer' ? 'border-primary bg-primary/10' : 'border-gray-300'}`}>
+                    <Label htmlFor="buyer" className="cursor-pointer flex flex-col items-center space-y-2 text-gray-800">
                       <RadioGroupItem value="buyer" id="buyer" />
                       <Store className="w-8 h-8 text-primary" />
                       <span className="text-black font-medium">Buyer</span>
@@ -102,7 +100,7 @@ const RoleOnboarding = () => {
                 placeholder="e.g., Pune, Maharashtra"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="bg-bazaar-bg border-gray-600 text-white"
+                className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                 required
               />
             </div>
@@ -118,7 +116,7 @@ const RoleOnboarding = () => {
                     placeholder="e.g., 5"
                     value={formData.farmSize}
                     onChange={(e) => setFormData({ ...formData, farmSize: e.target.value })}
-                    className="bg-bazaar-bg border-gray-600 text-white"
+                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                     required
                   />
                 </div>
@@ -129,7 +127,7 @@ const RoleOnboarding = () => {
                     placeholder="e.g., Tomatoes, Rice, Onions"
                     value={formData.crops}
                     onChange={(e) => setFormData({ ...formData, crops: e.target.value })}
-                    className="bg-bazaar-bg border-gray-600 text-white"
+                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                     required
                   />
                 </div>
@@ -146,7 +144,7 @@ const RoleOnboarding = () => {
                     placeholder="e.g., Fresh Mart"
                     value={formData.businessName}
                     onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                    className="bg-bazaar-bg border-gray-600 text-white"
+                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                     required
                   />
                 </div>
@@ -169,9 +167,9 @@ const RoleOnboarding = () => {
               </>
             )}
 
-            <Button 
-              type="submit" 
-              className="bazaar-button w-full" 
+            <Button
+              type="submit"
+              className="bazaar-button w-full"
               disabled={loading}
             >
               {loading ? 'Setting up your profile...' : 'Complete Setup'}
