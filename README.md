@@ -66,8 +66,8 @@ Bazaar provides a comprehensive web platform that:
   <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="200"/>
   <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="200"/>
   <img src="/public/assets/four.png" alt="Buyer Matches Screen" width="200"/>
+  <img src="/public/assets/seven.png" alt="Disease Detection" width="800"/>
   <img src="/public/assets/six.png" alt="Bazaar Analytics Landscape" width="800"/>
-
 </div>
 
 ## 🚀 Getting Started
