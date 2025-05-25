@@ -11,9 +11,9 @@ const Navigation = () => {
 
   const navItems = [
     { name: 'Dashboard', href: '#dashboard', icon: TrendingUp },
-    { name: 'Markets', href: '#markets', icon: TrendingUp },
-    { name: 'Buyers', href: '#buyers', icon: Users },
-    { name: 'Alerts', href: '#alerts', icon: Bell },
+    { name: 'Markets', href: '/markets', icon: TrendingUp },
+    { name: 'Buyers', href: '/buyers', icon: Users },
+    { name: 'Alerts', href: '/alerts', icon: Bell },
   ];
 
   // Check if user is admin (you can customize this logic based on your user roles)
