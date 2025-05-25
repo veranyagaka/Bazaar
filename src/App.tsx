@@ -12,7 +12,7 @@ import FarmerDashboard from "./components/FarmerDashboard";
 import BuyerDashboard from "./components/BuyerDashboard";
 import DiseaseDetection from "./pages/DiseaseDetection";
 import { useUser } from "@clerk/clerk-react";
-
+import ChatWidget from "./components/ChatWidget";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -31,6 +31,8 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatWidget />
+
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
