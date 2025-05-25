@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import Alerts from "./pages/Alerts";
 import Markets from "./pages/Markets";
 import Buyers from "./pages/Buyers";
+import Onboarding from "./pages/Onboarding";
+import Chatroom from "@/pages/Chatroom";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="/alerts" element={<Alerts />} />
@@ -29,7 +32,12 @@ const App = () => (
 
 
           <Route path="*" element={<NotFound />} />
+
+          <Route path="/chatroom" element={<Chatroom />} />
+
         </Routes>
+        <ChatWidget />
+
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
