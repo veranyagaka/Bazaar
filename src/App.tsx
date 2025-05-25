@@ -8,7 +8,7 @@ import Index from "./pages/Index";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
-
+import ChatWidget from "./components/ChatWidget";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -24,6 +24,8 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatWidget />
+
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
