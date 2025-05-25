@@ -53,11 +53,11 @@ Bazaar provides a comprehensive web platform that:
 
 ## 🖼 Screenshots
 
-<div align="center">
+<div align="center" style="display: flex; gap: 16px;">
   <img src="/public/assets/one.jpeg" alt="Bazaar App Welcome Screen" width="300"/>
   <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="300"/>
   <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="300"/>
-  <img src="/public/assets/four.jpeg" alt="Buyer Matches Screen" width="300"/>
+  <img src="/public/assets/four.png" alt="Buyer Matches Screen" width="300"/>
 </div>
 
 ## 🚀 Getting Started
