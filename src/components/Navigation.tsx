@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
-import { Menu, X, TrendingUp, Users, Bell, Shield } from 'lucide-react';
+import { Menu, X, TrendingUp, Users, Bell, Shield, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const Navigation = () => {
     { name: 'Dashboard', href: '#dashboard', icon: TrendingUp },
     { name: 'Markets', href: '#markets', icon: TrendingUp },
     { name: 'Buyers', href: '#buyers', icon: Users },
-    { name: 'Alerts', href: '#alerts', icon: Bell },
+    { name: 'Alerts', href: '#alerts', icon: Bell }
   ];
 
   // Check if user is admin (you can customize this logic based on your user roles)
