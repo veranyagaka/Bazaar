@@ -2,9 +2,13 @@
 
 A web-first platform connecting small-scale farmers with better market opportunities through real-time pricing data, buyer matching, and transparent agricultural commerce.
 
-## 🚀 Demo
+## 🚀 Demo & Resources 
 - [📹 Canva Pitch Deck Link](https://www.canva.com/design/DAGoPGoNMZE/Wk6BFNWMOLKanS-OGux8mQ/edit?utm_content=DAGoPGoNMZE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 - [🌐 Live Mobile App](https://bazaar-market-app.rork.app/)
+- [🕸️ Web App]()
+- [📄 Prompts Full Documentation](https://www.notion.so/PROMPTS-MD-DOCS-1fefecc0d34a80deaaadd8c0b48dac56?pvs=4)
+- [📄 Market Match Feature Full Documentation](https://www.notion.so/Market-Matching-System-Documentation-1fefecc0d34a80b68c37dbd3c90fdca0?pvs=4)
+- [📄 AI Disease Detection Feature Full Documentation](https://www.notion.so/AI-Powered-Crop-Disease-Detection-Data-Warehousing-Integration-Guide-1fefecc0d34a80c7aff9d3fc589c5c23?pvs=4)
 
 
 ## 📌 Table of Contents
