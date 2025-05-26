@@ -33,7 +33,8 @@ const Index = () => {
       
       <SignedOut>
         <Hero />
-        <MarketFeed />
+        <DashboardSection />
+        <MatchingSection />
       </SignedOut>
       
       <SignedIn>
