@@ -4,10 +4,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
-import MarketFeed from '@/components/MarketFeed';
 import FarmerDashboard from '@/components/FarmerDashboard';
 import BuyerDashboard from '@/components/BuyerDashboard';
 import Footer from '@/components/Footer';
+import DashboardSection from '@/components/DashboardSection';
+import MatchingSection from '@/components/MatchingSection';
 
 const Index = () => {
   const { user, isLoaded } = useUser();

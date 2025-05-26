@@ -19,7 +19,17 @@ export default {
 			}
 		},
 		extend: {
+			backgroundImage: {
+				'card-gradient': 'linear-gradient(135deg, hsl(var(--card)) 0%, hsl(217 19% 14%) 100%)',
+			  },
 			colors: {
+				bazaar: {
+					bg: '#1a1a1a',
+					card: '#2a2a2a',
+					'card-light': '#f8f9fa',
+					orange: '#ff5733',
+					'orange-light': '#ff6b47',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

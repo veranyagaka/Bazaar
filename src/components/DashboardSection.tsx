@@ -35,10 +35,10 @@ const DashboardSection = () => {
   ];
 
   return (
-    <section id="dashboard" className="py-16 bg-background">
+    <section id="dashboard" className="py-16 bazaar-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-white">
             Kenya Market Dashboard
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -47,7 +47,7 @@ const DashboardSection = () => {
         </div>
 
         {/* Market Prices Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 bg-bazaar-card">
           {marketPrices.map((price, index) => (
             <MarketPriceCard key={index} {...price} />
           ))}
@@ -63,4 +63,6 @@ const DashboardSection = () => {
   );
 };
 
-export default DashboardSection;
+export default DashboardSection;                        
+
+

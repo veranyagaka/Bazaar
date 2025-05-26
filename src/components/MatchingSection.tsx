@@ -34,10 +34,10 @@ const MatchingSection = () => {
   ];
 
   return (
-    <section id="connect" className="py-16 bg-secondary/20">
+    <section id="connect" className="py-16 bazaar-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <div className="text-center mb-12"> 
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-white">
             Smart Buyer Matching
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -47,10 +47,10 @@ const MatchingSection = () => {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {buyerMatches.map((buyer, index) => (
-            <div key={index} className="gradient-card p-6 rounded-lg">
+            <div key={index} className="gradient-card p-6 rounded-lg bg-bazaar-card">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
+                  <h3 className="text-lg font-semibold text-foreground mb-1 text-white">
                     {buyer.name}
                   </h3>
                   <div className="flex items-center space-x-4 text-sm text-muted-foreground">
@@ -73,15 +73,15 @@ const MatchingSection = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Crop Needed:</span>
-                  <span className="text-foreground font-medium">{buyer.cropNeeded}</span>
+                  <span className="text-foreground font-medium text-white">{buyer.cropNeeded}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Quantity:</span>
-                  <span className="text-foreground font-medium">{buyer.quantity}</span>
+                  <span className="text-foreground font-medium text-white">{buyer.quantity}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Price Offered:</span>
-                  <span className="text-primary font-bold">KES {buyer.priceOffered.toLocaleString()}</span>
+                  <span className="text-primary font-bold text-white">KES {buyer.priceOffered.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -89,7 +89,7 @@ const MatchingSection = () => {
                 <Button className="w-full bg-primary hover:bg-primary/90">
                   Connect Now
                 </Button>
-                <Button variant="outline" className="w-full border-border hover:bg-secondary">
+                <Button variant="outline" className="w-full border-border bg-bazaar-card">
                   View Details
                 </Button>
               </div>
