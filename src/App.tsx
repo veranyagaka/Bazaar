@@ -13,6 +13,9 @@ import Buyers from "./pages/Buyers";
 import Onboarding from "./pages/Onboarding";
 import Chatroom from "@/pages/Chatroom";
 import ChatWidget from "./components/ChatWidget";
+import BuyerDashboard from "./components/BuyerDashboard";
+import FarmerDashboard from "./components/FarmerDashboard";
+import DiseaseDetection from "@/pages/DiseaseDetection";
 
 const queryClient = new QueryClient();
 
