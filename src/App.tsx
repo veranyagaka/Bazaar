@@ -17,6 +17,7 @@ import FarmerDashboard from "./components/FarmerDashboard";
 import BuyerDashboard from "./components/BuyerDashboard";
 import DiseaseDetection from "./pages/DiseaseDetection";
 import { useUser } from "@clerk/clerk-react";
+import MarketMatch from "./components/MarketMatch";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/farmer" element={<FarmerDashboard  />} />
           <Route path="/buyer" element={<BuyerDashboard/>} />
           <Route path="/disease-detection" element={<ProtectedRoute><DiseaseDetection /></ProtectedRoute>} />
+          <Route path="/market-match" element={<ProtectedRoute><MarketMatch /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/buyers" element={<Buyers />} />

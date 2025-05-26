@@ -61,7 +61,7 @@ const MatchResults = ({ matches, searchData, onBackToSearch }: MatchResultsProps
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex items-center mb-6">
         <Button
-          variant="outline"
+          variant="secondary"
           onClick={onBackToSearch}
           className="mr-4"
         >
