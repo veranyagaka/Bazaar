@@ -31,10 +31,14 @@ app.all('/', async (req, res) => {
   }
 
   try {
-    const supabaseClient = createClient(
-      process.env.SUPABASE_URL || '',
-      process.env.SUPABASE_ANON_KEY || ''
-    );
+    const supabaseUrl = process.env.VITE_SUPABASE_URL;
+    const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error("Missing Supabase environment variables: SUPABASE_URL and/or SUPABASE_ANON_KEY");
+    }
+
+    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
     // Get recent disease detections for warehouse sync
     const { data: detections, error } = await supabaseClient
