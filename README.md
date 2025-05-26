@@ -15,6 +15,7 @@ A web-first platform connecting small-scale farmers with better market opportuni
 
 - [🌟 Problem Statement](#-problem-statement)
 - [💡Solution](#solution)
+- [📝 Prompts & AI Guidance](#-prompts--ai-guidance)
 - [🧰 Tech Stack](#-tech-stack)
 - [🖼 Screenshots](#-screenshots)
 - [🚀 Getting Started](#-getting-started)
@@ -50,6 +51,19 @@ Bazaar provides a comprehensive web platform that:
 - **Price Alerts**: Notifications for optimal selling opportunities
 - **Trend Analysis**: Historical data and market predictions
 - **Direct Communication**: In-app messaging or WhatsApp integration
+
+## 📝 Prompts & AI Guidance
+
+Bazaar leverages advanced prompt engineering and AI tools (Lovable, Copilot, Claude AI, Rork) to accelerate development and ensure a robust, user-focused platform.  
+We use carefully crafted prompts for both web and mobile app planning, debugging, and feature ideation—including AI-powered crop disease detection and market matching.
+
+- **Lovable & Claude AI:** For web-first and mobile-first project planning, tech stack selection, UI/UX guidelines, and database design.
+- **Copilot:** For TypeScript and code debugging prompts.
+- **Rork:** For mobile app architecture, API, and feature prompts.
+- **v0:** For refining the web architecture and crafting a readable README.
+- **AI Feature Prompts:** For integrating crop disease detection, analytics, and dashboard extensions.
+
+👉 [View the full prompts documentation on Notion](https://www.notion.so/PROMPTS-MD-DOCS-1fefecc0d34a80deaaadd8c0b48dac56?pvs=4)
 
 ## 🛠️ Tech Stack
 
@@ -275,7 +289,6 @@ Frontend (React) ↔ Supabase Edge Functions ↔ OpenAI Vision API
 |---------------------|-------------------------|-------------------------|----------------------------------------------|-----------------------|
 | React + TypeScript  | Supabase Edge Functions | OpenAI GPT-4o Vision    | Azure Synapse / AWS Redshift / Google BigQuery | Real-time Dashboards  |
 | Tailwind CSS        | PostgreSQL with RLS     | Custom Agricultural Prompts | ETL Pipelines                             | Predictive Modeling   |
-
 
 ## Quick Stats
 
