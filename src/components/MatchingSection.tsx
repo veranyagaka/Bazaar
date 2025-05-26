@@ -1,11 +1,11 @@
 
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Star } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 const MatchingSection = () => {
   const buyerMatches = [
     {
-      name: "Nakumatt Fresh Produce",
       location: "8 km away",
       rating: 4.8,
       cropNeeded: "Maize",
@@ -32,6 +32,7 @@ const MatchingSection = () => {
       timePosted: "1 hour ago"
     }
   ];
+  const navigate = useNavigate();
 
   return (
     <section id="connect" className="py-16 bazaar-bg">
@@ -86,10 +87,10 @@ const MatchingSection = () => {
               </div>
 
               <div className="space-y-2">
-                <Button className="w-full bg-primary hover:bg-primary/90">
+                <Button onClick={() => navigate("/onboarding")} className="w-full bg-primary hover:bg-primary/90">
                   Connect Now
                 </Button>
-                <Button variant="outline" className="w-full border-border bg-bazaar-card">
+                <Button onClick={() => navigate("/onboarding")} variant="outline" className="w-full border-border bg-bazaar-card">
                   View Details
                 </Button>
               </div>
