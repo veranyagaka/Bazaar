@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Camera, Upload, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabaseClient';
 import { useUser } from '@clerk/clerk-react';
 
 interface DetectionResult {
