@@ -75,7 +75,7 @@ We use carefully crafted prompts for both web and mobile app planning, debugging
 ## 🖼 Screenshots
 
 <div align="center" style="gap: 16px;">
-    <img src="/public/assets/five.png/" alt="Bazaar Insights Landscape" width="800"/>
+    <img src="/public/assets/five.png" alt="Bazaar Insights Landscape" width="800"/>
   <img src="/public/assets/one.jpeg" alt="Bazaar App Welcome Screen" width="200"/>
   <img src="/public/assets/two.jpeg" alt="Bazaar Dashboard" width="200"/>
   <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="200"/>
@@ -221,6 +221,11 @@ The Market Matching System intelligently connects farmers with potential buyers 
 | React + TypeScript  | Supabase Edge Functions | OpenAI GPT-4o Vision    | Azure Synapse / AWS Redshift / Google BigQuery | Real-time Dashboards  |
 | Tailwind CSS        | PostgreSQL with RLS     | Custom Agricultural Prompts | ETL Pipelines                             | Predictive Modeling   |
 
+<div align="center" style="gap: 16px;">
+    <img src="/public/assets/warehouse.png" alt="Microsoft Fabric Warehouse" width="800"/>
+    <img src="/public/assets/synapse.png" alt="Azure Synapse Analytics" width="800"/>
+</div>
+
 ## Quick Stats
 
 - **17+ Supported Crops**: Comprehensive crop type coverage
@@ -274,6 +279,10 @@ Frontend (React) ↔ Supabase Edge Functions ↔ OpenAI Vision API
                    Data Warehouse (Azure/AWS/GCP)
 
 ```
+
+<div align="center" style="gap: 16px;">
+    <img src="/public/assets/detection.png" alt="AI Crop Disease Detection with AI Bazaar chatbot" width="800"/>
+</div>
 
 ## Detection Capabilities
 
