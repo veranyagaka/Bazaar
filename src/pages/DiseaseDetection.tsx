@@ -184,217 +184,251 @@ const DiseaseDetection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            AI Crop Disease Detection
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Upload photos of your crops to get instant disease diagnosis and treatment recommendations powered by advanced AI
-          </p>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          AI Crop Disease Detection
+        </h1>
+        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+          Upload photos of your crops to get instant disease diagnosis and treatment recommendations powered by advanced AI
+        </p>
+      </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Image Upload Section */}
-          <div className="gradient-card p-6 rounded-lg">
-            <h2 className="text-xl font-semibold text-foreground mb-4">Upload Crop Image</h2>
-            
-            <div className="space-y-4">
-              {/* Crop Type and Location Inputs */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Crop Type
-                  </label>
-                  <select
-                    value={cropType}
-                    onChange={(e) => setCropType(e.target.value)}
-                    className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
-                  >
-                    <option value="maize">Maize</option>
-                    <option value="beans">Beans</option>
-                    <option value="potatoes">Potatoes</option>
-                    <option value="tomatoes">Tomatoes</option>
-                    <option value="kale">Kale (Sukuma Wiki)</option>
-                    <option value="cabbage">Cabbage</option>
-                    <option value="onions">Onions</option>
-                    <option value="coffee">Coffee</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Location/County
-                  </label>
-                  <input
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="e.g., Nairobi, Kiambu"
-                    className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
-                  />
-                </div>
-              </div>
-
-              {!imagePreview ? (
-                <div 
-                  className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
-                  onClick={() => fileInputRef.current?.click()}
+      <div className="grid lg:grid-cols-2 gap-8">
+        {/* Image Upload Section */}
+        <div className="bg-bazaar-bg p-6 rounded-lg">
+          <h2 className="text-xl font-semibold text-white mb-4">Upload Crop Image</h2>
+          
+          <div className="space-y-4">
+            {/* Crop Type and Location Inputs */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-white block text-sm font-medium text-foreground mb-2">
+                  Crop Type
+                </label>
+                <select
+                  value={cropType}
+                  onChange={(e) => setCropType(e.target.value)}
+                  className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
                 >
-                  <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-2">Click to upload or drag and drop</p>
-                  <p className="text-sm text-muted-foreground">PNG, JPG or JPEG (max 10MB)</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="relative">
-                    <img 
-                      src={imagePreview} 
-                      alt="Selected crop" 
-                      className="w-full h-64 object-cover rounded-lg"
-                    />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="absolute top-2 right-2"
-                      onClick={() => {
-                        setImagePreview(null);
-                        setSelectedImage(null);
-                        setDetectionResult(null);
-                      }}
-                    >
-                      Change Image
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                className="hidden"
-              />
-
-              <Button
-                onClick={handleAnalyze}
-                disabled={!selectedImage || isAnalyzing || !location.trim()}
-                className="w-full"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                    Analyzing with AI...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Analyze for Diseases
-                  </>
-                )}
-              </Button>
+                  <option value="maize">Maize</option>
+                  <option value="beans">Beans</option>
+                  <option value="potatoes">Potatoes</option>
+                  <option value="tomatoes">Tomatoes</option>
+                  <option value="kale">Kale (Sukuma Wiki)</option>
+                  <option value="cabbage">Cabbage</option>
+                  <option value="onions">Onions</option>
+                  <option value="coffee">Coffee</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-white block text-sm font-medium text-foreground mb-2">
+                  Location/County
+                </label>
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="e.g., Nairobi, Kiambu"
+                  className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Results Section */}
-          <div className="gradient-card p-6 rounded-lg">
-            <h2 className="text-xl font-semibold text-foreground mb-4">AI Analysis Results</h2>
-            
-            {!detectionResult ? (
-              <div className="text-center py-12">
-                <AlertTriangle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  Upload and analyze an image to see AI-powered disease detection results
-                </p>
+            {!imagePreview ? (
+              <div 
+                className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground mb-2">Click to upload or drag and drop</p>
+                <p className="text-sm text-muted-foreground">PNG, JPG or JPEG (max 10MB)</p>
               </div>
             ) : (
-              <div className="space-y-6">
-                {/* Disease Info */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {detectionResult.disease_name}
-                    </h3>
-                    <div className="flex items-center space-x-2">
-                      {getUrgencyIcon(detectionResult.urgency)}
-                      <span className="text-sm capitalize text-muted-foreground">
-                        {detectionResult.urgency} urgency
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <span className="text-sm text-muted-foreground">
-                      Confidence: {(detectionResult.confidence_score * 100).toFixed(1)}%
+              <div className="space-y-4">
+                <div className="relative">
+                  <img 
+                    src={imagePreview} 
+                    alt="Selected crop" 
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="absolute top-2 right-2"
+                    onClick={() => {
+                      setImagePreview(null);
+                      setSelectedImage(null);
+                      setDetectionResult(null);
+                    }}
+                  >
+                    Change Image
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+
+            <Button
+              onClick={handleAnalyze}
+              disabled={!selectedImage || isAnalyzing || !location.trim()}
+              className="w-full"
+            >
+              {isAnalyzing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                  Analyzing with AI...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Analyze for Diseases
+                </>
+              )}
+            </Button>
+
+            {/* Showcase Analysis Button */}
+            <Button
+              variant="outline"
+              className="w-full mt-2 text-black"
+              onClick={() => {
+                setDetectionResult({
+                  disease_name: "Maize Leaf Blight",
+                  confidence_score: 0.92,
+                  severity: "moderate",
+                  affected_area_percentage: 23.5,
+                  symptoms: ["Yellowing leaves", "Brown lesions", "Wilting"],
+                  causes: ["Fungal infection", "High humidity"],
+                  treatment_recommendations: [
+                    "Apply recommended fungicide",
+                    "Remove affected leaves",
+                    "Improve field drainage"
+                  ],
+                  preventive_measures: [
+                    "Rotate crops",
+                    "Use disease-resistant seeds",
+                    "Monitor humidity"
+                  ],
+                  urgency: "medium",
+                  estimated_yield_loss: 12.0,
+                  follow_up_required: true,
+                  follow_up_days: 7
+                });
+                toast({
+                  title: "Showcase Analysis Complete",
+                  description: "This is a sample result to demonstrate the system."
+                });
+              }}
+            >
+              Run Showcase Analysis
+            </Button>
+          </div>
+        </div>
+
+        {/* Results Section */}
+        <div className="bg-bazaar-bg p-6 rounded-lg">
+          <h2 className="text-xl font-semibold text-white mb-4">AI Analysis Results</h2>
+          
+          {!detectionResult ? (
+            <div className="text-center py-12 text-white">
+              <AlertTriangle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">
+                Upload and analyze an image to see AI-powered disease detection results
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Disease Info */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg text-white font-semibold text-foreground">
+                    {detectionResult.disease_name}
+                  </h3>
+                  <div className="flex items-center space-x-2">
+                    {getUrgencyIcon(detectionResult.urgency)}
+                    <span className="text-sm capitalize text-muted-foreground">
+                      {detectionResult.urgency} urgency
                     </span>
-                    <span className={`text-sm font-medium capitalize ${getSeverityColor(detectionResult.severity)}`}>
-                      {detectionResult.severity} severity
-                    </span>
                   </div>
-
-                  {detectionResult.affected_area_percentage > 0 && (
-                    <div className="text-sm text-muted-foreground">
-                      Affected Area: {detectionResult.affected_area_percentage.toFixed(1)}%
-                    </div>
-                  )}
-
-                  {detectionResult.estimated_yield_loss > 0 && (
-                    <div className="text-sm text-orange-600">
-                      Estimated Yield Loss: {detectionResult.estimated_yield_loss.toFixed(1)}%
-                    </div>
-                  )}
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-muted-foreground">
+                    Confidence: {(detectionResult.confidence_score * 100).toFixed(1)}%
+                  </span>
+                  <span className={`text-sm text-white font-medium capitalize ${getSeverityColor(detectionResult.severity)}`}>
+                    {detectionResult.severity} severity
+                  </span>
                 </div>
 
-                <div>
-                  <h4 className="font-medium text-foreground mb-2">Symptoms</h4>
-                  <ul className="space-y-1">
-                    {detectionResult.symptoms.map((symptom, index) => (
-                      <li key={index} className="text-sm text-muted-foreground flex items-center">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2" />
-                        {symptom}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {detectionResult.affected_area_percentage > 0 && (
+                  <div className="text-sm text-muted-foreground">
+                    Affected Area: {detectionResult.affected_area_percentage.toFixed(1)}%
+                  </div>
+                )}
 
-                {/* Treatment */}
-                <div>
-                  <h4 className="font-medium text-foreground mb-2">Treatment Recommendations</h4>
-                  <ul className="space-y-1">
-                    {detectionResult.treatment_recommendations.map((treatment, index) => (
-                      <li key={index} className="text-sm text-muted-foreground flex items-center">
-                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
-                        {treatment}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Prevention */}
-                <div>
-                  <h4 className="font-medium text-foreground mb-2">Prevention Measures</h4>
-                  <ul className="space-y-1">
-                    {detectionResult.preventive_measures.map((measure, index) => (
-                      <li key={index} className="text-sm text-muted-foreground flex items-center">
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2" />
-                        {measure}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {detectionResult.follow_up_required && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p className="text-sm text-yellow-800">
-                      <AlertTriangle className="w-4 h-4 inline mr-2" />
-                      Follow-up recommended in {detectionResult.follow_up_days} days
-                    </p>
+                {detectionResult.estimated_yield_loss > 0 && (
+                  <div className="text-sm text-orange-600">
+                    Estimated Yield Loss: {detectionResult.estimated_yield_loss.toFixed(1)}%
                   </div>
                 )}
               </div>
-            )}
-          </div>
+
+              <div>
+                <h4 className="font-medium text-foreground mb-2 text-white">Symptoms</h4>
+                <ul className="space-y-1">
+                  {detectionResult.symptoms.map((symptom, index) => (
+                    <li key={index} className="text-sm text-muted-foreground flex items-center">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2" />
+                      {symptom}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Treatment */}
+              <div>
+                <h4 className="font-medium text-foreground mb-2 text-white">Treatment Recommendations</h4>
+                <ul className="space-y-1">
+                  {detectionResult.treatment_recommendations.map((treatment, index) => (
+                    <li key={index} className="text-sm text-muted-foreground flex items-center">
+                      <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                      {treatment}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Prevention */}
+              <div>
+                <h4 className="font-medium text-foreground mb-2 text-white">Prevention Measures</h4>
+                <ul className="space-y-1">
+                  {detectionResult.preventive_measures.map((measure, index) => (
+                    <li key={index} className="text-sm text-muted-foreground flex items-center">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2" />
+                      {measure}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {detectionResult.follow_up_required && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <p className="text-sm text-yellow-800">
+                    <AlertTriangle className="w-4 h-4 inline mr-2" />
+                    Follow-up recommended in {detectionResult.follow_up_days} days
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

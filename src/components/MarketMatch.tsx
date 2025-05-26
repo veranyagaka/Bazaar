@@ -186,26 +186,26 @@ const MarketMatch = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-4">
+        <h1 className="text-3xl font-bold text-white mb-4">
           Smart Market Matching
         </h1>
-        <p className="text-xl text-muted-foreground">
+        <p className="text-xl text-gray-400">
           Find the best buyers for your crops across Kenya
         </p>
       </div>
 
-      <Card className="p-6 mb-6">
+      <Card className="p-6 mb-6 bg-bazaar-bg">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <Label htmlFor="cropType">Crop Type *</Label>
+              <Label htmlFor="cropType" className="text-white">Crop Type *</Label>
               <Select value={matchData.cropType} onValueChange={(value) => handleInputChange('cropType', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select crop type" />
                 </SelectTrigger>
                 <SelectContent>
                   {cropTypes.map(crop => (
-                    <SelectItem key={crop} value={crop}>
+                    <SelectItem key={crop} value={crop} className="text-black">
                       {crop.charAt(0).toUpperCase() + crop.slice(1)}
                     </SelectItem>
                   ))}
@@ -215,7 +215,7 @@ const MarketMatch = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="quantity">Quantity *</Label>
+                <Label htmlFor="quantity" className="text-white">Quantity *</Label>
                 <Input
                   id="quantity"
                   type="number"
@@ -223,33 +223,34 @@ const MarketMatch = () => {
                   value={matchData.quantity || ''}
                   onChange={(e) => handleInputChange('quantity', parseFloat(e.target.value) || 0)}
                   placeholder="Enter quantity"
+                  className="text-black"
                 />
               </div>
               <div>
-                <Label htmlFor="unit">Unit</Label>
+                <Label htmlFor="unit" className="text-white">Unit</Label>
                 <Select value={matchData.unit} onValueChange={(value) => handleInputChange('unit', value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="kg">Kilograms</SelectItem>
-                    <SelectItem value="bags">Bags (90kg)</SelectItem>
-                    <SelectItem value="tonnes">Tonnes</SelectItem>
-                    <SelectItem value="bunches">Bunches</SelectItem>
+                    <SelectItem value="kg" className="text-black">Kilograms</SelectItem>
+                    <SelectItem value="bags" className="text-black">Bags (90kg)</SelectItem>
+                    <SelectItem value="tonnes" className="text-black">Tonnes</SelectItem>
+                    <SelectItem value="bunches" className="text-black">Bunches</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div>
-              <Label htmlFor="county">County *</Label>
+              <Label htmlFor="county" className="text-white">County *</Label>
               <Select value={matchData.county} onValueChange={(value) => handleInputChange('county', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select county" />
                 </SelectTrigger>
                 <SelectContent>
                   {counties.map(county => (
-                    <SelectItem key={county} value={county}>
+                    <SelectItem key={county} value={county} className="text-black">
                       {county}
                     </SelectItem>
                   ))}
@@ -260,18 +261,19 @@ const MarketMatch = () => {
 
           <div className="space-y-4">
             <div>
-              <Label htmlFor="location">Specific Location</Label>
+              <Label htmlFor="location" className="text-white">Specific Location</Label>
               <Input
                 id="location"
                 value={matchData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 placeholder="e.g., Nakuru Town, Kiambu Road"
+                className="text-black"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="minPrice">Min Price (KES/kg)</Label>
+                <Label htmlFor="minPrice" className="text-white">Min Price (KES/kg)</Label>
                 <Input
                   id="minPrice"
                   type="number"
@@ -279,10 +281,11 @@ const MarketMatch = () => {
                   value={matchData.minPrice || ''}
                   onChange={(e) => handleInputChange('minPrice', parseFloat(e.target.value) || 0)}
                   placeholder="Minimum price"
+                  className="text-black"
                 />
               </div>
               <div>
-                <Label htmlFor="maxPrice">Max Price (KES/kg)</Label>
+                <Label htmlFor="maxPrice" className="text-white">Max Price (KES/kg)</Label>
                 <Input
                   id="maxPrice"
                   type="number"
@@ -290,31 +293,33 @@ const MarketMatch = () => {
                   value={matchData.maxPrice || ''}
                   onChange={(e) => handleInputChange('maxPrice', parseFloat(e.target.value) || 0)}
                   placeholder="Maximum price"
+                  className="text-black"
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="deliveryDate">Preferred Delivery Date</Label>
+              <Label htmlFor="deliveryDate" className="text-white">Preferred Delivery Date</Label>
               <Input
                 id="deliveryDate"
                 type="date"
                 value={matchData.deliveryDate}
                 onChange={(e) => handleInputChange('deliveryDate', e.target.value)}
+                className="text-black"
               />
             </div>
 
             <div>
-              <Label htmlFor="qualityGrade">Quality Grade</Label>
+              <Label htmlFor="qualityGrade" className="text-white">Quality Grade</Label>
               <Select value={matchData.qualityGrade} onValueChange={(value) => handleInputChange('qualityGrade', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select quality grade" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="premium">Premium</SelectItem>
-                  <SelectItem value="grade-a">Grade A</SelectItem>
-                  <SelectItem value="grade-b">Grade B</SelectItem>
-                  <SelectItem value="standard">Standard</SelectItem>
+                  <SelectItem value="premium" className="text-black">Premium</SelectItem>
+                  <SelectItem value="grade-a" className="text-black">Grade A</SelectItem>
+                  <SelectItem value="grade-b" className="text-black">Grade B</SelectItem>
+                  <SelectItem value="standard" className="text-black">Standard</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -338,6 +343,41 @@ const MarketMatch = () => {
                 Find Market Matches
               </>
             )}
+          </Button>
+
+          {/* Showcase Match Button */}
+          <Button
+            variant="outline"
+            className="w-full mt-2 text-black"
+            onClick={() => {
+              setMatches([
+                {
+                  cropType: 'maize',
+                  quantity: 1000,
+                  unit: 'kg',
+                  location: 'Nakuru Town',
+                  county: 'Nakuru',
+                  maxPrice: 60,
+                  minPrice: 50,
+                  deliveryDate: '2024-07-01',
+                  qualityGrade: 'premium',
+                  matchScore: 95,
+                  avgMarketPrice: 55,
+                  profiles: {
+                    full_name: 'Sample Buyer',
+                    phone_number: '+254700000000',
+                    location: 'Nakuru Town'
+                  }
+                }
+              ]);
+              setShowResults(true);
+              toast({
+                title: "Showcase Match Complete",
+                description: "This is a sample match to demonstrate the system."
+              });
+            }}
+          >
+            Run Showcase Match
           </Button>
         </div>
       </Card>
