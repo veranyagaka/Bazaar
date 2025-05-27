@@ -82,7 +82,7 @@ We use carefully crafted prompts for both web and mobile app planning, debugging
   <img src="/public/assets/three.jpeg" alt="Disease Detection Screen" width="200"/>
   <img src="/public/assets/four.png" alt="Buyer Matches Screen" width="200"/>
   <img src="/public/assets/seven.png" alt="Disease Detection" width="800"/>
-  <img src="/public/assets/market-match.png" alt="Disease Detection" width="800"/>
+    <img src="/public/assets/market-match.png" alt="Disease Detection" width="800"/>
   <img src="/public/assets/market-match-two.png" alt="Disease Detection" width="800"/>
   <img src="/public/assets/six.png" alt="Bazaar Analytics Landscape" width="800"/>
 </div>
