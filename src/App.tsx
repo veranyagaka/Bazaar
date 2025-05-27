@@ -34,8 +34,8 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/farmer" element={<FarmerDashboard  />} />
           <Route path="/buyer" element={<BuyerDashboard/>} />
-          <Route path="/disease-detection" element={<ProtectedRoute><DiseaseDetection /></ProtectedRoute>} />
-          <Route path="/market-match" element={<ProtectedRoute><MarketMatch /></ProtectedRoute>} />
+          <Route path="/disease-detection" element={<DiseaseDetection />} />
+          <Route path="/market-match" element={<MarketMatch />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/buyers" element={<Buyers />} />
