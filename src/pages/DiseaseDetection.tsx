@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { Camera, Upload, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Camera, Upload, AlertTriangle, CheckCircle, Clock, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabaseClient';
 import { useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 
 interface DetectionResult {
   disease_name: string;
@@ -30,6 +31,7 @@ const DiseaseDetection = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { user } = useUser();
+  const navigate = useNavigate();
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -183,6 +185,16 @@ const DiseaseDetection = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-6 flex items-center">
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 text-white border-gray-600 bg-bazaar-bg hover:bg-primary hover:text-white"
+          onClick={() => navigate('/farmer')}
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
       <div className="mb-8 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
           AI Crop Disease Detection

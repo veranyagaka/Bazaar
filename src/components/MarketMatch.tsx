@@ -5,10 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MapPin, Truck, TrendingUp, Users } from 'lucide-react';
+import { MapPin, Truck, TrendingUp, Users, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@supabase/supabase-js';
 import MatchResults from './MatchResults';
+import { useNavigate } from 'react-router-dom';
 
 interface MarketMatchData {
   cropType: string;
@@ -44,6 +45,7 @@ const MarketMatch = () => {
   });
   const [matches, setMatches] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate();
 
   const counties = [
     'Nairobi', 'Mombasa', 'Nakuru', 'Kisumu', 'Eldoret', 'Thika', 'Malindi',
@@ -119,6 +121,16 @@ const MarketMatch = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      <div className="mb-6 flex items-center">
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 text-white border-gray-600 bg-bazaar-bg hover:bg-primary hover:text-white"
+          onClick={() => navigate('/farmer')}
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-white mb-4">
           Smart Market Matching
