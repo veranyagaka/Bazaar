@@ -64,19 +64,17 @@ const DiseaseDetection = () => {
   };
 
   const callAIDetectionService = async (imageUrl: string): Promise<DetectionResult> => {
-    const { data, error } = await supabase.functions.invoke('ai-disease-detection', {
-      body: {
-        imageUrl,
-        cropType,
-        location: location || 'Kenya'
-      }
+    const params = new URLSearchParams({
+      imageUrl,
+      cropType,
+      location: location || 'Kenya'
     });
-
-    if (error) {
-      throw error;
+    const response = await fetch(`/disease-detection?${params.toString()}`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Disease detection request failed');
     }
-
-    return data;
+    return await response.json();
   };
 
   const saveDetectionResult = async (imageUrl: string, result: DetectionResult) => {

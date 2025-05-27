@@ -74,88 +74,22 @@ const MarketMatch = () => {
 
     setIsLoading(true);
     try {
-      // Get buyer requests that match criteria
-      const { data: buyerRequests, error: buyerError } = await supabase
-        .from('buyer_requests')
-        .select(`
-          *,
-          profiles!buyer_id (
-            full_name,
-            phone_number,
-            location
-          )
-        `)
-        .eq('crop_type', matchData.cropType)
-        .eq('status', 'active')
-        .gte('quantity_needed', matchData.quantity * 0.5) // Accept 50% or more of quantity
-        .lte('quantity_needed', matchData.quantity * 2) // Don't exceed 2x the quantity
-        .order('created_at', { ascending: false });
-
-      if (buyerError) throw buyerError;
-
-      // Get market prices for comparison
-      const { data: marketPrices, error: priceError } = await supabase
-        .from('market_prices')
-        .select('*')
-        .eq('crop_type', matchData.cropType)
-        .eq('county', matchData.county)
-        .order('date_recorded', { ascending: false })
-        .limit(5);
-
-      if (priceError) throw priceError;
-
-      // Calculate match scores and filter results
-      const scoredMatches = buyerRequests?.map(request => {
-        let score = 0;
-        
-        // Location match (county)
-        if (request.county === matchData.county) score += 30;
-        else if (request.county) score += 10; // Different county but specified
-        
-        // Price match
-        const avgMarketPrice = marketPrices?.reduce((sum, price) => sum + price.price_per_kg, 0) / (marketPrices?.length || 1);
-        const priceRange = matchData.maxPrice - matchData.minPrice;
-        if (request.max_price_per_unit >= matchData.minPrice && request.max_price_per_unit <= matchData.maxPrice) {
-          score += 25;
-        } else if (request.max_price_per_unit >= avgMarketPrice * 0.9) {
-          score += 15;
-        }
-        
-        // Quantity match
-        const quantityRatio = Math.min(request.quantity_needed, matchData.quantity) / Math.max(request.quantity_needed, matchData.quantity);
-        score += quantityRatio * 20;
-        
-        // Delivery date match
-        if (request.delivery_date && matchData.deliveryDate) {
-          const requestDate = new Date(request.delivery_date);
-          const ourDate = new Date(matchData.deliveryDate);
-          const daysDiff = Math.abs((requestDate.getTime() - ourDate.getTime()) / (1000 * 3600 * 24));
-          if (daysDiff <= 7) score += 15;
-          else if (daysDiff <= 30) score += 8;
-        }
-        
-        // Recent request bonus
-        const daysSincePosted = (Date.now() - new Date(request.created_at).getTime()) / (1000 * 3600 * 24);
-        if (daysSincePosted <= 3) score += 10;
-        else if (daysSincePosted <= 7) score += 5;
-
-        return {
-          ...request,
-          matchScore: Math.round(score),
-          avgMarketPrice,
-          profiles: request.profiles
-        };
-      }).filter(match => match.matchScore >= 30) // Only show matches with score 30+
-       .sort((a, b) => b.matchScore - a.matchScore) || [];
-
-      setMatches(scoredMatches);
+      const response = await fetch("/market-match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(matchData)
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Market match request failed");
+      }
+      const { matches } = await response.json();
+      setMatches(matches);
       setShowResults(true);
-      
       toast({
         title: "Market Matches Found",
-        description: `Found ${scoredMatches.length} potential buyers for your ${matchData.cropType}.`
+        description: `Found ${matches.length} potential buyers for your ${matchData.cropType}.`
       });
-
     } catch (error) {
       console.error('Market matching error:', error);
       toast({
